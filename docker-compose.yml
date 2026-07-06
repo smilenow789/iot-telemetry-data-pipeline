@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: env_mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    restart: unless-stopped
+
+  pipeline:
+    build: .
+    container_name: env_batch_pipeline
+    depends_on:
+      - mongodb
+    environment:
+      - MONGO_URI=mongodb://env_mongodb:27017/
+    volumes:
+      - ./data:/app/data
+      - ./output:/app/output
+
+volumes:
+  mongo_data:
