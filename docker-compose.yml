@@ -21,5 +21,16 @@ services:
       - ./data:/app/data
       - ./output:/app/output
 
+  webserver:
+    image: nginx:alpine
+    container_name: env_dashboard_server
+    ports:
+      - "8080:80"
+    volumes:
+      - ./output:/usr/share/nginx/html:ro
+    depends_on:
+      - pipeline
+    restart: unless-stopped
+
 volumes:
   mongo_data:
